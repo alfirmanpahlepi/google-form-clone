@@ -20,7 +20,7 @@ export default function modalState() {
 export interface ModalState {
   isOpen: boolean;
   // eslint-disable-next-line no-unused-vars
-  openModal: (element: ReactNode) => void;
+  openModal: (element?: ReactNode) => void;
   closeModal: () => void;
   element: ReactNode;
 }
