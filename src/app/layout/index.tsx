@@ -7,7 +7,7 @@ export default function RootLayout() {
     <div className="flex h-screen w-full flex-col overflow-hidden bg-neutral-100">
       <Header />
       <div className="h-full w-full overflow-y-auto overflow-x-hidden">
-        <main className="h-[300vh]">
+        <main>
           <Suspense fallback="...">
             <Outlet />
           </Suspense>
