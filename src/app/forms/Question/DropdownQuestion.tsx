@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Menu } from '@headlessui/react';
 import { Fragment } from 'react';
-import type { InputType } from '../useEditForms';
+import type { InputType } from '../useForms';
 
 export default function DropdownQuestion({
   changeQuestionType,

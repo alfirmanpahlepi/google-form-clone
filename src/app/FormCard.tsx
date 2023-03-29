@@ -1,33 +1,47 @@
+import useAppState from '@/context';
+import { deleteFormFirestore } from '@/services/firebase/forms';
 import { limitString } from '@/utils';
 import { Menu } from '@headlessui/react';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function FormCard({
-  id,
-  title,
-  date,
-}: {
-  title: string;
-  date: string | number;
-  id: string;
-}) {
+export default function FormCard({ id, title, date }: { title: string; date: string; id: string }) {
+  const { modal } = useAppState();
+
   const navigate = useNavigate();
+
+  function copyURLToClipboard() {
+    navigator.clipboard
+      .writeText(`${window.location.href}forms/${id}`)
+      .then(() => alert('URL berhasil disalin'))
+      .catch((e) => alert(e));
+  }
+
+  async function deleteForm() {
+    try {
+      const confirm = window.confirm('are you sure to delete this form?');
+
+      if (!confirm) return;
+
+      modal.openModal();
+
+      await deleteFormFirestore(id);
+
+      alert('success delete form');
+    } catch (error) {
+      alert((error as Error).message);
+    } finally {
+      modal.closeModal();
+    }
+  }
 
   const dropdownMenu = useMemo(
     () => [
-      { name: 'Buka', onClick: (id: string) => navigate('/forms/' + id) },
-      { name: 'Edit', onClick: (id: string) => navigate('/forms/' + id) },
-      {
-        name: 'Salin link URL',
-        onClick: (id: string) =>
-          navigator.clipboard
-            .writeText(window.location.href + id)
-            .then(() => alert('URL berhasil disalin'))
-            .catch((e) => alert(e)),
-      },
-      { name: 'Tampilkan data', onClick: (id: string) => navigate('/forms/' + id) },
-      { name: 'Hapus', onClick: (id: string) => navigate('/forms/' + id) },
+      { name: 'Buka', onClick: () => navigate('/forms/' + id) },
+      { name: 'Edit', onClick: () => navigate('/forms/' + id + '?edit=true') },
+      { name: 'Salin link URL', onClick: copyURLToClipboard },
+      { name: 'Tampilkan data', onClick: () => navigate('/forms/' + id) },
+      { name: 'Hapus', onClick: deleteForm },
     ],
     [id, navigate],
   );
@@ -37,7 +51,7 @@ export default function FormCard({
       <p className="text-base font-semibold text-gray-700">{limitString(title, 20)}</p>
       <div className="flex items-center space-x-1">
         <img alt="form" className="h-5 w-5" src="/assets/icons/document.svg" />
-        <span className="text-gray-500">Diperbarui {new Date(date).toLocaleString('id-ID')}</span>
+        <span className="text-gray-500">Diperbarui {new Date(date).toLocaleString('en-US')}</span>
       </div>
       <Menu>
         <Menu.Button className="absolute right-1 top-1 cursor-pointer rounded-full p-1 duration-200 hover:bg-gray-100">
@@ -49,7 +63,7 @@ export default function FormCard({
               <Menu.Item key={i} as="li">
                 <button
                   className="block w-full py-2 px-5 text-left hover:bg-gray-100"
-                  onClick={() => el.onClick(id)}
+                  onClick={el.onClick}
                   type="button"
                 >
                   {el.name}

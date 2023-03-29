@@ -14,7 +14,7 @@ export default function ButtonIconQuestion({
   ];
 
   return (
-    <div className="flex items-center justify-end space-x-3 border-t py-3">
+    <div className="flex items-center justify-end space-x-3 border-t pt-6">
       {icons.map((el, idx) => (
         <span key={idx}>
           <img alt={el.alt} className="h-6 w-6 cursor-pointer" onClick={el.onClick} src={el.src} />

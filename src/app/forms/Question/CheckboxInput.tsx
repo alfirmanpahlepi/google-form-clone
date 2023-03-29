@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
 export default function CheckboxInput({
   options,
-  withEditAccess,
+  hasEditAccess,
   addOption,
   removeOption,
   setOptionName,
 }: {
   options: string[];
-  withEditAccess: boolean;
+  hasEditAccess: boolean;
   addOption: () => void;
   removeOption: (optionIndex: number) => void;
   setOptionName: (optionIndex: number, value: string) => void;
@@ -19,19 +19,19 @@ export default function CheckboxInput({
           <input
             // onClick={(e) => handleChange(e, idx)}
             className="h-5 w-5"
-            disabled={withEditAccess}
+            disabled={hasEditAccess}
             name="checkbox"
             // value={el}
             type="checkbox"
           />
           <input
             className="w-full border-b border-white bg-white py-2 hover:border-gray-300 focus:border-b-2 focus:border-purple-700"
-            disabled={!withEditAccess}
+            disabled={!hasEditAccess}
             onChange={(e) => setOptionName(idx, e.target.value)}
             placeholder={`opsi ${idx + 1}`}
             value={el ? el : ''}
           />
-          {withEditAccess && options.length > 1 && (
+          {hasEditAccess && options.length > 1 && (
             <button
               className="absolute right-0 flex cursor-pointer items-center justify-end opacity-0 duration-300 group-hover:opacity-100"
               onClick={() => removeOption(idx)}
@@ -46,7 +46,7 @@ export default function CheckboxInput({
           )}
         </div>
       ))}
-      {withEditAccess && (
+      {hasEditAccess && (
         <div className="flex items-center space-x-3">
           <input className="h-5 w-5" disabled type="checkbox" />
           <button

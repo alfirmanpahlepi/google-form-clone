@@ -1,9 +1,11 @@
 import { Avatar } from '@/components/ui';
 import useAppState from '@/context';
 import { signInWithGoogleFirebase, signOutFirebase } from '@/services/firebase/auth';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Header() {
+  const navigate = useNavigate();
+
   const { auth, modal } = useAppState();
 
   async function login() {
@@ -24,11 +26,17 @@ export default function Header() {
 
   async function logout() {
     try {
+      const confirm = window.confirm('are you sure to logout this session?');
+
+      if (!confirm) return;
+
       modal.openModal();
 
       const result = await signOutFirebase();
 
       if (!result) throw new Error('Fail to Sign Out');
+
+      navigate('/');
 
       auth.clearAuthState();
     } catch (error) {

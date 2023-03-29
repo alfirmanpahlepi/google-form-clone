@@ -1,41 +1,17 @@
-import { useEffect } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import useAppState from '@/context';
 import HeadForm from './HeadForm';
 import Question from './Question';
-import useEditForms from './useEditForms';
+import useForms from './useForms';
 
 export default function Forms() {
-  const { title, description, onHeadFormInputChange, action, questions, submitEditForm } =
-    useEditForms();
-
-  const { auth } = useAppState();
-
-  const navigate = useNavigate();
-
-  const { id } = useParams();
-
-  const location = useLocation();
-
-  const query = new URLSearchParams(location.search);
-
-  const editQuery = !!query.get('edit');
-
-  const withEditAccess = editQuery || id === 'new';
-
-  useEffect(() => {
-    if (auth.isPending) return;
-    // wait for isPending false
-
-    if ((!auth.isAuthenticated && id === 'new') || (!auth.isAuthenticated && editQuery)) {
-      // if unauthorize user try to go to /form/new then redirect to home
-      // if unauthorize user try to go to /form/{id}?edit=true then redirect to home
-
-      alert('unauthorized');
-
-      return navigate('/', { replace: true, state: location });
-    }
-  }, [auth.isPending, auth.isAuthenticated, id, location]);
+  const {
+    title,
+    description,
+    onHeadFormInputChange,
+    action,
+    questions,
+    submitEditForm,
+    hasEditAccess,
+  } = useForms();
 
   return (
     <div className="p-8">
@@ -43,9 +19,9 @@ export default function Forms() {
         <HeadForm
           addQuestion={() => action.addQuestion(0)}
           description={description}
+          hasEditAccess={hasEditAccess}
           onInputChange={onHeadFormInputChange}
           title={title}
-          withEditAccess={withEditAccess}
         />
         {questions.map((item, i) => (
           <Question
@@ -53,7 +29,7 @@ export default function Forms() {
             action={action}
             currentIndex={i}
             data={item}
-            withEditAccess={withEditAccess}
+            hasEditAccess={hasEditAccess}
           />
         ))}
         <div className="flex justify-end">
