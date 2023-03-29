@@ -8,6 +8,7 @@ export interface UserData {
 }
 
 export default function authState() {
+  const [isPending, setIsPending] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserData>({
     uid: '',
@@ -26,20 +27,25 @@ export default function authState() {
     setIsAuthenticated(false);
   }
 
-  return { storeAuthState, clearAuthState, isAuthenticated, userData };
+  return { storeAuthState, clearAuthState, isAuthenticated, userData, isPending, setIsPending };
 }
 
 export interface AuthState {
   isAuthenticated: boolean;
+  isPending: boolean;
+  userData: UserData;
+  clearAuthState: () => void;
+  // eslint-disable-next-line no-unused-vars
+  setIsPending: (boolean: boolean) => void;
   // eslint-disable-next-line no-unused-vars
   storeAuthState: (userData: UserData) => void;
-  clearAuthState: () => void;
-  userData: UserData;
 }
 
 export const initialAuthState: AuthState = {
   isAuthenticated: false,
+  isPending: true,
+  userData: { uid: '', email: '', photoURL: '', displayName: '' },
   storeAuthState: () => alert('authState: unhandled function'),
   clearAuthState: () => alert('authState: unhandled function'),
-  userData: { uid: '', email: '', photoURL: '', displayName: '' },
+  setIsPending: () => alert('authState: unhandled function'),
 };

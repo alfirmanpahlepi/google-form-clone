@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import Modal from './components/Modal';
 import Page from './routes';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -6,12 +6,11 @@ import useAppState from './context';
 
 function App() {
   const { auth, modal } = useAppState();
-  const [pending, setPending] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(getAuth(), (user) => {
-      setPending(true);
+    auth.setIsPending(true);
 
+    const unsubscribe = onAuthStateChanged(getAuth(), (user) => {
       modal.openModal();
 
       if (user)
@@ -23,15 +22,13 @@ function App() {
         });
       else auth.clearAuthState();
 
-      setPending(false);
-
       modal.closeModal();
+
+      auth.setIsPending(false);
     });
 
     return () => unsubscribe();
   }, []);
-
-  if (pending) return;
 
   return (
     <>
