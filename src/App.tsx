@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import Modal from './components/Modal';
 import Page from './routes';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import useAppState from './context';
@@ -30,12 +29,7 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  return (
-    <>
-      <Modal />
-      <Page />
-    </>
-  );
+  return <Page />;
 }
 
 export default App;

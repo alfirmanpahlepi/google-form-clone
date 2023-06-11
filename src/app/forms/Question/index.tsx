@@ -1,3 +1,4 @@
+import useAppState from '@/context';
 import type { Question as QuestionInterface, ActionForms } from '../useForms';
 import ButtonIconQuestion from './ButtonIconQuestion';
 import CheckboxInput from './CheckboxInput';
@@ -17,6 +18,12 @@ export default function Question({
   hasEditAccess: boolean;
   data: QuestionInterface;
 }) {
+  const { auth } = useAppState();
+
+  const respondent = data.respondents.find((el) => el.uid === auth.userData.uid);
+
+  const responseValue = hasEditAccess ? '' : respondent?.response ?? '';
+
   return (
     <div className="relative rounded-lg border-t bg-white px-8 pb-6 shadow">
       {hasEditAccess && (
@@ -53,17 +60,32 @@ export default function Question({
       </div>
 
       {/* inputs  */}
-      {data.type === 'text' && <TextInput hasEditAccess={hasEditAccess} />}
-      {data.type === 'textarea' && <TextAreaInput hasEditAccess={hasEditAccess} />}
+      {data.type === 'text' && (
+        <TextInput
+          hasEditAccess={hasEditAccess}
+          setResponse={(e) => action.responseQuestion(currentIndex, e.target.value)}
+          value={responseValue}
+        />
+      )}
+      {data.type === 'textarea' && (
+        <TextAreaInput
+          hasEditAccess={hasEditAccess}
+          setResponse={(e) => action.responseQuestion(currentIndex, e.target.value)}
+          value={responseValue}
+        />
+      )}
       {data.type === 'radio' && (
         <RadioInput
           addOption={() => action.addOption(currentIndex)}
           hasEditAccess={hasEditAccess}
+          name={'radio' + currentIndex}
           options={data.options}
           removeOption={(optionIndex) => action.removeOption(currentIndex, optionIndex)}
           setOptionName={(optionIndex, value) =>
             action.setOptionName(currentIndex, optionIndex, value)
           }
+          setResponse={(e) => action.responseQuestion(currentIndex, e.target.value)}
+          value={responseValue}
         />
       )}
       {data.type === 'checkbox' && (
@@ -75,6 +97,8 @@ export default function Question({
           setOptionName={(optionIndex, value) =>
             action.setOptionName(currentIndex, optionIndex, value)
           }
+          setResponse={(value) => action.responseQuestion(currentIndex, value)}
+          value={responseValue.split(', ')}
         />
       )}
       {hasEditAccess && (

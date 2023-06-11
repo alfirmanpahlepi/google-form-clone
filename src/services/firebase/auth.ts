@@ -4,9 +4,6 @@ import app from '.';
 export const signInWithGoogleFirebase = () =>
   signInWithPopup(getAuth(app), new GoogleAuthProvider())
     .then((result) => result.user)
-    .catch((error) => error);
+    .catch((e) => e);
 
-export const signOutFirebase = () =>
-  signOut(getAuth(app))
-    .then(() => true)
-    .catch(() => false);
+export const signOutFirebase = () => signOut(getAuth(app)).catch((e) => e);

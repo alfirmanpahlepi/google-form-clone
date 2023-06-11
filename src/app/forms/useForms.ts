@@ -10,6 +10,15 @@ import {
 
 export type InputType = 'text' | 'textarea' | 'radio' | 'checkbox';
 
+export interface Respondent {
+  uid: string;
+  name: string;
+  email: string;
+  photoUrl: string;
+  response: string;
+  createdAt: string;
+}
+
 export interface Question {
   title: string;
   type: InputType;
@@ -17,7 +26,9 @@ export interface Question {
   description?: string;
   options: string[];
   checkboxs?: string[];
+  respondents: Respondent[];
 }
+
 export interface FormsData {
   uid?: string;
   title: string;
@@ -39,6 +50,7 @@ export interface ActionForms {
   addOption: (targetIndex: number) => void;
   setOptionName: (targetIndex: number, optionIndex: number, value: string) => void;
   removeOption: (targetIndex: number, optionIndex: number) => void;
+  responseQuestion: (targetIndex: number, value: string) => void;
 }
 
 export default function useForms() {
@@ -78,6 +90,7 @@ export default function useForms() {
         withDescription: false,
         type: 'text',
         options: [],
+        respondents: [],
       });
       setData({ ...newData });
     },
@@ -128,23 +141,39 @@ export default function useForms() {
       newData.questions[targetIndex].options.splice(optionIndex, 1);
       setData({ ...newData });
     },
+
+    responseQuestion: function (targetIndex: number, value: string) {
+      const newData = { ...data };
+
+      const response = {
+        uid: auth.userData.uid,
+        name: auth.userData.displayName,
+        email: auth.userData.email,
+        photoUrl: auth.userData.photoURL,
+        response: value,
+        createdAt: new Date(Date.now()).toISOString(),
+      };
+
+      const respondentIndex = newData.questions[targetIndex].respondents.findIndex(
+        (el) => el.uid === auth.userData.uid,
+      );
+
+      if (respondentIndex === -1) newData.questions[targetIndex].respondents.push(response);
+      else newData.questions[targetIndex].respondents[respondentIndex] = response;
+
+      setData({ ...newData });
+    },
   };
 
   async function submit() {
     try {
-      if (!hasEditAccess) return;
-
       const confirm = window.confirm('are you sure to save this changes?');
 
       if (!confirm) return;
 
       modal.openModal();
 
-      if (editQuery && id !== 'new') {
-        const confirm = window.confirm('you will lost your current response data');
-
-        if (!confirm) return;
-
+      if (id !== 'new') {
         await updateFormByIdFirestore(id || '', data);
 
         navigate('/');

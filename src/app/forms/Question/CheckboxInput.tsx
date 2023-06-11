@@ -1,3 +1,5 @@
+import { ChangeEvent, useState } from 'react';
+
 /* eslint-disable no-unused-vars */
 export default function CheckboxInput({
   options,
@@ -5,23 +7,41 @@ export default function CheckboxInput({
   addOption,
   removeOption,
   setOptionName,
+  setResponse,
+  value,
 }: {
   options: string[];
   hasEditAccess: boolean;
   addOption: () => void;
   removeOption: (optionIndex: number) => void;
   setOptionName: (optionIndex: number, value: string) => void;
+  setResponse: (value: string) => void;
+  value: string[];
 }) {
+  const [checks, setChecks] = useState<string[]>([]);
+
+  function handleChange(e: ChangeEvent<HTMLInputElement>, el: string) {
+    const newChecks = [...checks];
+    if (e.target.checked) newChecks.push(el);
+    else
+      newChecks.splice(
+        checks.findIndex((check) => check === el),
+        1,
+      );
+    setChecks([...newChecks]);
+    setResponse(newChecks.join(', '));
+  }
+
   return (
     <div>
       {options.map((el, idx) => (
         <div key={idx} className="group relative flex items-center space-x-3">
           <input
-            // onClick={(e) => handleChange(e, idx)}
+            checked={value.some((check) => check === el)}
             className="h-5 w-5"
             disabled={hasEditAccess}
             name="checkbox"
-            // value={el}
+            onChange={(e) => handleChange(e, el)}
             type="checkbox"
           />
           <input

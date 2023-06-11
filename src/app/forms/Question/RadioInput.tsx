@@ -1,26 +1,36 @@
+import { ChangeEvent } from 'react';
+
 /* eslint-disable no-unused-vars */
 export default function RadioInput({
   options,
   hasEditAccess,
+  name,
   addOption,
   removeOption,
   setOptionName,
-}: {
+  setResponse,
+}: // value,
+{
+  name: string;
   options: string[];
   hasEditAccess: boolean;
   addOption: () => void;
   removeOption: (optionIndex: number) => void;
   setOptionName: (optionIndex: number, value: string) => void;
+  // eslint-disable-next-line no-unused-vars
+  setResponse: (e: ChangeEvent<HTMLInputElement>) => void;
+  value: string;
 }) {
   return (
     <>
       {options.map((el, idx) => (
         <div key={idx} className="group relative flex items-center space-x-3">
           <input
+            // checked={value ? options.some((opt) => opt === value) : false}
             className="h-5 w-5"
             disabled={hasEditAccess}
-            name="radio"
-            // onChange={(e) => handleChange(e)}
+            name={name}
+            onChange={setResponse}
             type="radio"
             value={el}
           />
