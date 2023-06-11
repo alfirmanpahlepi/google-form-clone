@@ -2,13 +2,13 @@ import { initializeApp } from 'firebase/app';
 
 // TODO: Replace the following with your app's Firebase project configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: 'AIzaSyDlLz6w3rLYJ_n211nRIVCK_tlV2U1GA0A',
+  authDomain: 'handform-c62a3.firebaseapp.com',
+  databaseURL: 'https://handform-c62a3-default-rtdb.firebaseio.com',
+  projectId: 'handform-c62a3',
+  storageBucket: 'handform-c62a3.appspot.com',
+  messagingSenderId: '867248517559',
+  appId: '1:867248517559:web:7eed23797fda6d2ae8f832',
 };
 
 const app = initializeApp(firebaseConfig);
