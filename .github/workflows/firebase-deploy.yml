@@ -25,7 +25,7 @@ jobs:
         run: yarn build
 
       - name: Deploy to Firebase
-        uses: w9jds/firebase-action@v1
+        uses: w9jds/firebase-action@master
         with:
           args: deploy --only hosting
         env:
