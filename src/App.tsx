@@ -14,10 +14,12 @@ function App() {
 
       if (user)
         auth.storeAuthState({
-          displayName: user.displayName || '',
-          email: user.email || '',
-          photoURL: user.photoURL || '',
-          uid: user.uid,
+          displayName: user.displayName || 'Anonim-' + Date.now(),
+          email: user.email || '-',
+          photoURL:
+            user.photoURL ||
+            'https://news-app-sepia.vercel.app/_next/image?url=%2Fuser.png&w=3840&q=75',
+          uid: user.uid || Date.now().toString(),
         });
       else auth.clearAuthState();
 

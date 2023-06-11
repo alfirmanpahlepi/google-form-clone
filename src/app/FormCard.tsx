@@ -5,7 +5,17 @@ import { Menu } from '@headlessui/react';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export default function FormCard({ id, title, date }: { title: string; date: string; id: string }) {
+export default function FormCard({
+  id,
+  title,
+  date,
+  setShowRespondents,
+}: {
+  title: string;
+  date: string;
+  id: string;
+  setShowRespondents: () => void;
+}) {
   const { modal } = useAppState();
 
   const navigate = useNavigate();
@@ -40,7 +50,7 @@ export default function FormCard({ id, title, date }: { title: string; date: str
       { name: 'Buka', onClick: () => navigate('/forms/' + id) },
       { name: 'Edit', onClick: () => navigate('/forms/' + id + '?edit=true') },
       { name: 'Salin link URL', onClick: copyURLToClipboard },
-      { name: 'Tampilkan data', onClick: () => navigate('/forms/' + id) },
+      { name: 'Tampilkan data', onClick: setShowRespondents },
       { name: 'Hapus', onClick: deleteForm },
     ],
     [id, navigate],
