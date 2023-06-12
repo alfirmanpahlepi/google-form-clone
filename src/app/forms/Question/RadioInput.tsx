@@ -9,8 +9,8 @@ export default function RadioInput({
   removeOption,
   setOptionName,
   setResponse,
-}: // value,
-{
+  value,
+}: {
   name: string;
   options: string[];
   hasEditAccess: boolean;
@@ -26,7 +26,7 @@ export default function RadioInput({
       {options.map((el, idx) => (
         <div key={idx} className="group relative flex items-center space-x-3">
           <input
-            // checked={value ? options.some((opt) => opt === value) : false}
+            checked={el === value}
             className="h-5 w-5"
             disabled={hasEditAccess}
             name={name}

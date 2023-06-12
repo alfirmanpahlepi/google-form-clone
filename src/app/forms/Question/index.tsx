@@ -98,7 +98,7 @@ export default function Question({
             action.setOptionName(currentIndex, optionIndex, value)
           }
           setResponse={(value) => action.responseQuestion(currentIndex, value)}
-          value={responseValue.split(', ')}
+          value={responseValue.length ? responseValue.split(', ') : []}
         />
       )}
       {hasEditAccess && (
